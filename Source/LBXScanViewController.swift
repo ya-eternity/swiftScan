@@ -129,23 +129,21 @@ open class LBXScanViewController: UIViewController {
      处理扫码结果，如果是继承本控制器的，可以重写该方法,作出相应地处理，或者设置delegate作出相应处理
      */
     open func handleCodeResult(arrayResult: [LBXScanResult]) {
-        guard let delegate = scanResultDelegate else {
-            fatalError("you must set scanResultDelegate or override this method without super keyword")
-        }
-        
-        if !isSupportContinuous {
+         if !isSupportContinuous {
             navigationController?.popViewController(animated: true)
-
         }
-        
         if let result = arrayResult.first {
-            delegate.scanFinished(scanResult: result, error: nil)
+            if let delegate = scanResultDelegate {
+                delegate.scanFinished(scanResult: result, error: nil)
+            }
             if let finished = didScanFinished {
                 finished(result, nil)
             }
         } else {
             let result = LBXScanResult(str: nil, img: nil, barCodeType: nil, corner: nil)
-            delegate.scanFinished(scanResult: result, error: "no scan result")
+            if let delegate = scanResultDelegate {
+                delegate.scanFinished(scanResult: result, error: "no scan result")
+            }
             if let finished = didScanFinished {
                 finished(result, "no scan result")
             }
