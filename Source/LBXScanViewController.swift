@@ -25,7 +25,7 @@ open class LBXScanViewController: UIViewController {
 
     open var delegate: QRRectDelegate?
      
-    open var didScanFinished: ((scanResult: LBXScanResult, error: String?) -> ())?
+    open var didScanFinished: ((_: LBXScanResult, _: String?) -> ())?
 
     open var scanObj: LBXScanWrapper?
 
@@ -141,13 +141,13 @@ open class LBXScanViewController: UIViewController {
         if let result = arrayResult.first {
             delegate.scanFinished(scanResult: result, error: nil)
             if let finished = didScanFinished {
-                didScanFinished(scanResult: result, error: nil)
+                finished(result, nil)
             }
         } else {
             let result = LBXScanResult(str: nil, img: nil, barCodeType: nil, corner: nil)
             delegate.scanFinished(scanResult: result, error: "no scan result")
             if let finished = didScanFinished {
-                didScanFinished(scanResult: result, error: "no scan result")
+                finished(result, "no scan result")
             }
         }
     }
